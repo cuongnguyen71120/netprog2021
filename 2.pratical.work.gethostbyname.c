@@ -14,11 +14,11 @@
                 
                 // -------------------------- FUNCTION ------------------------------
 
-char *addrtype(int addrtype) { // Create the char function and the input date is addrtype
-        switch(addrtype) {     // Option the IP address family 
-                case AF_INET: // Option for IPv4
+char *addrtype(int addrtype) { 
+        switch(addrtype) {     
+                case AF_INET: 
                         return "AF_INET"; // 
-                case AF_INET6: // Option for IPv6
+                case AF_INET6: 
                         return "AF_INET6"; 
         }
         return "Unknown";
@@ -27,18 +27,18 @@ char *addrtype(int addrtype) { // Create the char function and the input date is
                 // --------------------------- MAIN ---------------------------
 
 int main(int argc, char **argv) {
-        struct hostent *hostname; // Create the struct hostent and  memory allocation 
+        struct hostent *hostname; 
         int i = 0;
-        char domain[100];// assgin variable for domain 
+        char domain[100];
         if (argc < 2) {
-                printf("Enter the domain:"); //Get data from user 
+                printf("Enter the domain:"); 
                 scanf("%s",domain);
-                hostname=gethostbyname(domain); // Get data for pointer
+                hostname=gethostbyname(domain); 
                
         }
         else
         {
-                hostname = gethostbyname(argv[1]);// return argv[1]
+                hostname = gethostbyname(argv[1]);
         }
         
         
