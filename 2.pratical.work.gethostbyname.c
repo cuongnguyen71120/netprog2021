@@ -15,11 +15,11 @@
                 // -------------------------- FUNCTION ------------------------------
 
 char *addrtype(int addrtype) { 
-        switch(addrtype) {     
+        switch(addrtype) {     //Option for IPV
                 case AF_INET: 
-                        return "AF_INET"; // 
+                        return "AF_INET"; //Option for IPv4 
                 case AF_INET6: 
-                        return "AF_INET6"; 
+                        return "AF_INET6"; //Option for IPv6
         }
         return "Unknown";
 }
