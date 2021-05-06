@@ -22,30 +22,25 @@ char *addrtype(int addr_type) {
 int main(int argc, char **argv){
     unsigned port =8784;
     struct hostent *hostname; 
-        int i = 0;
-        char domain[100];
-        if (argc < 2) {
-                printf("Enter the domain:"); 
-                scanf("%s",domain);
-                hostname=gethostbyname(domain); 
-               
-        }
-        else
-        {
-                hostname = gethostbyname(argv[1]);
+    int i = 0;
+    char domain[100];
+    if (argc < 2) {
+        printf("Enter the domain:"); 
+        scanf("%s",domain);
+        hostname=gethostbyname(domain); 
+    }
+    else{
+        hostname = gethostbyname(argv[1]);
         }
         
-        
-        if (!hostname) {
-                printf("Lookup Failed: %s\n", hstrerror(h_errno));
-                exit(0);
+    if (!hostname) {
+        printf("Lookup Failed: %s\n", hstrerror(h_errno));
+        exit(0);
         }
-        
-        i = 0;
-        while(hostname ->h_addr_list[i] != NULL) {
-                printf("The IP address:");
-                printf("%s\n", inet_ntoa((struct in_addr)*((struct in_addr *) hostname->h_addr_list[i])));
-                i++;
+    while(hostname ->h_addr_list[i] != NULL) {
+        printf("The IP address:");
+        printf("%s\n", inet_ntoa((struct in_addr)*((struct in_addr *) hostname->h_addr_list[i])));
+        i++;
         }
     // Client for socket
     struct sockaddr_in addr;
