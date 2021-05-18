@@ -58,8 +58,8 @@ int main(int argc, char **argv){
     addr.sin_family=AF_INET;
     memcpy((char *) &addr.sin_addr.s_addr, hostname->h_addr_list[0], hostname->h_length);
     addr.sin_port = htons(port);
-    int connect_sever=connect(sockfd,(struct sockaddr *)&addr,sizeof(addr));
-    if (connect_sever<0){
+    int connect_server=connect(sockfd,(struct sockaddr *)&addr,sizeof(addr));
+    if (connect_server<0){
         printf("Error connect\n");
         exit(0);
     }
@@ -74,7 +74,7 @@ int main(int argc, char **argv){
     //send message for server
     memset(message, 0, sizeof(message));
     strcpy(message,"Hello server\n");
-    send(connect_sever,message,sizeof(message),0);
+    send(connect_server,message,sizeof(message),0);
 
    
     
