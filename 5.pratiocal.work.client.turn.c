@@ -65,13 +65,13 @@ int main(int argc, char **argv){
     }
     printf("Connected with server\n");
 
-    //create the data trasfer for Sever 
+    //create the data trasfer for Server 
     char message[2048];
     // recv from sever
     recv(sockfd, message,2048,0);
     printf("Message from server:%s\n",message);
     
-    //send message for sever
+    //send message for server
     memset(message, 0, sizeof(message));
     strcpy(message,"Hello server\n");
     send(connect_sever,message,sizeof(message),0);
