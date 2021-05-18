@@ -48,12 +48,12 @@ int main(){
     
     //create the accept function
     clen=sizeof(caddr);
-        accept_create=accept(server_family,(struct sockaddr*)&caddr,&clen);
-        if(accept_create<0){
-            printf("Error accept\n");
-            exit(0);
-        }
-        printf("Connection accepted\n");
+    accept_create=accept(server_family,(struct sockaddr*)&caddr,&clen);
+    if(accept_create<0){
+        printf("Error accept\n");
+        exit(0);
+    }
+    printf("Connection accepted\n");
 
     //data trasfer for Client 
     char buff[2048];

@@ -11,13 +11,13 @@
 
 
 char *addrtype(int addr_type) { 
-        switch(addr_type) {     //Option for IPV
-                case AF_INET: 
-                        return "AF_INET"; //Option for IPv4 
-                case AF_INET6: 
-                        return "AF_INET6"; //Option for IPv6
+    switch(addr_type) {     //Option for IPV
+        case AF_INET: 
+            return "AF_INET"; //Option for IPv4 
+        case AF_INET6: 
+            return "AF_INET6"; //Option for IPv6
         }
-        return "Unknown";
+    return "Unknown";
 }
 
 int main(int argc, char **argv){
@@ -67,7 +67,7 @@ int main(int argc, char **argv){
 
     //create the data trasfer for Sever 
     char message[2048];
-     // recv from sever
+    // recv from sever
     recv(sockfd, message,2048,0);
     printf("Message from server:%s\n",message);
     
