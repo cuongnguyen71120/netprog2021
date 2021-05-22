@@ -68,18 +68,26 @@ int main(int argc, char **argv){
     //create the data trasfer for Server 
     char message[2048];
     // recv from sever
-    recv(sockfd, message,2048,0);
-    printf("Message from server:%s\n",message);
-    
-    //send message for server
-    memset(message, 0, sizeof(message));
-    strcpy(message,"Hello server\n");
-    send(connect_server,message,sizeof(message),0);
+    while(true){
+        int server_recv=recv(sockfd, message, sizeof(message), 0);
+        if (server_recv==0){
+            printf("Error\n");
+            exit(0);
+        }
 
-   
-    
-    return 0;
+        else{
+            //recv message from server
+            printf("From server: %s\n", message);
+            memset(message, 0, sizeof(message));
 
-    
+            //send messagefor server when recv message from client
+            printf("[Client]: \n");
+            scanf("%s",message);
+            send(connect_server,message,strlen(message)+1,0);
+           
+        }
     }
+    return 0;
+    
+}
 
