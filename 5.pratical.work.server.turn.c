@@ -57,17 +57,23 @@ int main(){
 
     //data trasfer for Client 
     char buff[2048];
-    // send message for client
-    memset(buff,0,sizeof(buff));
-    strcpy(buff,"Hello Client!\n");
-    send(accept_create,buff,sizeof(buff),0);
+    while(true){
+       int client_rev=recv(server_family, buff,sizeof(buff),0);//recv from the client 
+       if(client_rev==0){
+           printf("Error\n");
+           exit(0);
+       }
+       else{
+           //recv from client
+           printf("From client: %s\n",buff);
+           memset(buff,0,sizeof(buff));
 
-    //recv from client
-    recv(server_family,buff,2048,0);
-    sleep(5);
-    printf("Message from Client:%s \n",buff);
-
-
-    
-   return 0;
+           //message for client when recv from client
+           printf("[Server]: \n");
+           scanf("%s",buff);
+           send(accept_create,buff,strlen(buff)+1,0);
+          
+        }
+    }
+    return 0;
 }
