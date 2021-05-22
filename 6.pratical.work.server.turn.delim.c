@@ -57,26 +57,30 @@ int main(){
 
     //data trasfer for Client 
     char buff[2048];
+    char data[2024];
+    char hold=' ';
     while(true){
-       int client_rev=recv(server_family, buff,sizeof(buff),0);//recv from the client 
-       if(client_rev==0){
-           printf("Error\n");
-           exit(0);
-       }
-       if ((strncmp(buff, "exit", 4)) == 0) { 
+        //receive client messages
+        memset(&buff, 0 , sizeof(buff));
+        memset(&data, 0 , sizeof(data));
+        while (isDelimiter(buff) == 0) {
+            int receive = recv(accept_create, buff, sizeof(buff), 0);
+            strncat(&data,&buff,strlen(buff)); //append to buff
+        }
+        printf("[Client]: %s\n",data );
+        
+        //send messages to client
+        memset(&buff, 0 , 1024);
+        memset(&data, 0 , 2024);
+        printf("[Server]: ");
+        scanf("%s",buff);
+        strncat(&buff,&hold,1);
+        send(accept_create,buff, sizeof(buff), 0);
+        
+        //exit program 
+        if ((strncmp(buff, "exit", 4)) == 0) { 
             printf("Client Exit...\n"); 
             break; 
-        }
-       else{
-           //recv from client
-           printf("From client: %s\n",buff);
-           memset(buff,0,sizeof(buff));
-
-           //message for client when recv from client
-           printf("[Server]: \n");
-           scanf("%s",buff);
-           send(accept_create,buff,strlen(buff)+1,0);
-          
         }
     }
     return 0;

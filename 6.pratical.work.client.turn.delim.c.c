@@ -9,6 +9,14 @@
 #include<stdbool.h>
 #define PORT 8784;
 
+int dechar(char* x) {
+  for (int i = 0; i < strlen(x); i++) {
+    if (x[i] == ' ') {
+      return 1;
+    }
+  }
+  return 0;
+} 
 
 char *addrtype(int addr_type) { 
     switch(addr_type) {     //Option for IPV
@@ -63,31 +71,30 @@ int main(int argc, char **argv){
         printf("Error connect\n");
         exit(0);
     }
-    printf("Connect with server\n");
-    
+    printf("Connected with server\n");
 
+    //create the data trasfer for Server 
     char message[2048];
-    for (;;) { 
-        
-        printf("Enter message : ");  
-        
-        bzero(message, sizeof(message));
-        fgets(message,sizeof(message),stdin);
-        int connect_server = send(sockfd, message, strlen(message)+1, 0);
-        
-        if ((strncmp(message, "exit", 4)) == 0) { 
-            printf("Client Exit...\n"); 
-            break; 
-        }
-        else{
-            memset(message, 0, sizeof(message));
-            recv(sockfd, message, sizeof(message), 0);
-            printf("Server: %s\n", message);
-        }
-      
-    } 
+    char data[2024];
+    char apd =' ';
+    // recv from sever
+    while(true){
+        //send message to server 
+        memset(&message, 0, sizeof(message));
+        memset(&data,0, sizeof(data));
+        printf("[Client]: ");
+        scanf("%s",message);
 
-    return 0;
+        strncat(&message,&apd,1); //add delimiter to message 
+        send(sockfd,message,sizeof(message),0);
+        // receive server 
+        memset(&message,0, sizeof(message));
+        memset(&data,0,sizeof(data));
+        while(dechar(message)==0){
+            int receive = recv(sockfd, message, sizeof(message), 0);
+            strncat(&data,&message,strlen(message));
+        }
+        printf("[Server]: %s\n",data);
     }
-
-
+    return 0;
+}

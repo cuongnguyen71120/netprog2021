@@ -74,7 +74,6 @@ int main(int argc, char **argv){
             printf("Error\n");
             exit(0);
         }
-
         else{
             //recv message from server
             printf("From server: %s\n", message);
@@ -84,7 +83,6 @@ int main(int argc, char **argv){
             printf("[Client]: \n");
             scanf("%s",message);
             send(connect_server,message,strlen(message)+1,0);
-           
         }
     }
     return 0;
