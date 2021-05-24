@@ -1,21 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> //strlen 
-#include <errno.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>  //inet_addr
 #include<stdbool.h>
 #define PORT 8784;
+#define MAX 1000
 
-int dechar(char* x) {
-  for (int i = 0; i < strlen(x); i++) {
-    if (x[i] == ' ') {
-      return 1;
+
+void chat_message(int sockfd) 
+{ 
+    char message[MAX]; //message er
+    char data[MAX] = ""; //store received messages
+    char delimiter[2] = "\n";  
+    int n=0;
+
+    while(true)
+    {   
+        bzero(message , sizeof(message ));//using the memset fucntion  
+
+        //sending messages to server 
+        printf("[Client]: ");
+        fgets(message , sizeof(message ), stdin);// data from the keyboard 
+        send(sockfd, &message, sizeof(message ), 0);//send function to send message 
+        
+        //disconnect and exit program 
+        if(strncmp("quit", message , 4) == 0) 
+        { 
+            printf("Client Exit...\n"); 
+            break; 
+        }
+        
+        bzero(message , sizeof(message ));//Copy the character from 0 to sizeof message pointed to by the str of message
+
+        
+        //receive message from server 
+        printf("From Server : ");
+        while(strcmp(&message[n], delimiter) != 0)//Compared between two string and return its value
+        {
+            recv(sockfd, &message[n] , sizeof(message[n]), 0); 
+            printf("%c", message[n]);
+
+            strcat(data, &message[n]);//connect two string together 
+        }
+
     }
-  }
-  return 0;
+
+    shutdown(sockfd, SHUT_RDWR);//shutdown message 
+   
+            
 } 
 
 char *addrtype(int addr_type) { 
@@ -73,28 +108,7 @@ int main(int argc, char **argv){
     }
     printf("Connected with server\n");
 
-    //create the data trasfer for Server 
-    char message[2048];
-    char data[2024];
-    char apd =' ';
-    // recv from sever
-    while(true){
-        //send message to server 
-        memset(&message, 0, sizeof(message));
-        memset(&data,0, sizeof(data));
-        printf("[Client]: ");
-        scanf("%s",message);
+    chat_message(sockfd);//recall function above 
 
-        strncat(&message,&apd,1); //add delimiter to message 
-        send(sockfd,message,sizeof(message),0);
-        // receive server 
-        memset(&message,0, sizeof(message));
-        memset(&data,0,sizeof(data));
-        while(dechar(message)==0){
-            int receive = recv(sockfd, message, sizeof(message), 0);
-            strncat(&data,&message,strlen(message));
-        }
-        printf("[Server]: %s\n",data);
-    }
     return 0;
-}
+    }

@@ -40,7 +40,7 @@ void chat_message(int sockfd)
             recv(sockfd, &message[n], sizeof(message[n]), 0); 
             printf("%c", message[n]);
 
-            strcat(data, &message[n]);
+            strcat(data, &message[n]);//connect two string together
         }
 
     } 
