@@ -6,9 +6,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>  //inet_addr
 #include<stdbool.h>
+#include<fcntl.h>
 #define PORT 8784;
 #define MAX 1000
-
 
 void chat_message(int sockfd) 
 { 
@@ -19,6 +19,7 @@ void chat_message(int sockfd)
 
     while(true)
     {   
+        
         bzero(message , sizeof(message ));//using the memset fucntion  
 
         //sending messages to server 
@@ -101,14 +102,21 @@ int main(int argc, char **argv){
     addr.sin_family=AF_INET;
     memcpy((char *) &addr.sin_addr.s_addr, hostname->h_addr_list[0], hostname->h_length);
     addr.sin_port = htons(port);
+    //connect server 
     int connect_server=connect(sockfd,(struct sockaddr *)&addr,sizeof(addr));
     if (connect_server<0){
         printf("Error connect\n");
         exit(0);
     }
-    printf("Connected with server\n");
+    else{
+        printf("Connected with server\n");
+        //reuse address 
+        setsockopt(sockfd, SOL_SOCKET , SO_REUSEADDR , &(int){1}, sizeof(int));
+        // enable nonblocking 
+        fcntl(sockfd,F_GETFL,O_NONBLOCK);
+    }
 
     chat_message(sockfd);//recall function above 
 
     return 0;
-    }
+}

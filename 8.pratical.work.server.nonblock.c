@@ -5,8 +5,9 @@
 #include<string.h>//strlen
 #include<stdlib.h>
 #include<unistd.h>
+#include<fcntl.h>
 #include<stdbool.h>
-# define PORT 8784;
+#define PORT 8784;
 #define MAX 1000
 
 
@@ -69,11 +70,23 @@ int main(){
     else{
         printf("Socket created\n");
     }
+    //reusing the address function
+    int reu_address= setsockopt(server_family,SOL_SOCKET,SO_REUSEADDR, 
+                    &(int){1}, sizeof(int));
+    
+    // enable non-blocking socket
+    int nonblocking_option = fcntl(server_family, F_GETFL, 0);
+    nonblocking_option |=O_NONBLOCK;
+    fcntl(server_family, F_SETFL, nonblocking_option);
+
+
     memset(&serveraddr,0,sizeof(serveraddr));
     serveraddr.sin_family=AF_INET;
     serveraddr.sin_addr.s_addr=AF_INET;
     serveraddr.sin_port=htons(port);
     inet_pton(AF_INET,"0.0.0.0",&serveraddr.sin_addr); // "0.0.0.0" is the IPv4 address and using inet_pton to convert the IP address from text format to numeric binary 
+
+    
 
     //create the bind
     bind_create=bind(server_family,(struct sockaddr*)&serveraddr,sizeof(serveraddr));
@@ -84,32 +97,39 @@ int main(){
     printf("Bind done\n");
 
     //create the listen 
-    
+    listen_port=listen(server_family,5);
+    if(listen_port<0){
+        printf("Error listening\n");
+        exit(0);
+    }
+    printf("Successfully listened\n");
 
+    //create the non blocking 
     while(true){
-        listen_port=listen(server_family,5);
-        if(listen_port<0){
-            printf("Error listening\n");
-            exit(0);
-        }
-        printf("Successfully listened\n");
-        
         clen=sizeof(caddr);
         accept_create=accept(server_family,(struct sockaddr*)&caddr,&clen);
-        if(accept_create<0){
-            printf("Error accept\n");
-            exit(0);
-        }
-        printf("Connection accepted\n");
-
+        while(accept_create<0){
+           
+            accept_create=accept(server_family,(struct sockaddr*)&caddr,&clen);
+            
+            if (accept_create>0){
+                // nonblocking for client
+                printf("Connection accepted\n");
+                //enable nonblocking for client 
+                int nonblocking_option = fcntl(accept_create, F_GETFL, 0);
+                nonblocking_option |=O_NONBLOCK;
+                fcntl(accept_create, F_SETFL, nonblocking_option); 
+            }
+        } 
         //create the accept function
         if(chat_message(accept_create) == 1){
-                
+                    
             break;
         }
         else{
             chat_message(accept_create);
-            }    
+        }
+           
     }
     return 0;
 }
