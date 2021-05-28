@@ -186,8 +186,7 @@ int main(){
             chat_message(accept_create);
         }
 
-        }  
-    
+    }  
     
     return 0;
 }
