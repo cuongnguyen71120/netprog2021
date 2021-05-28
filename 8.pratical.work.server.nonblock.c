@@ -42,7 +42,7 @@ int chat_message(int server_family)
         //server exit program 
         if(strncmp("exit", buff, 4) == 0) //Compared between two string and return its value 
         { 
-            check = 1;
+            check=1;
 
             printf("Server Disconnecting...\n");
             shutdown(server_family, SHUT_RDWR);
@@ -50,9 +50,8 @@ int chat_message(int server_family)
             break; 
         }
     }
-    
-    
     return check;
+    
 }
 
 
@@ -112,6 +111,7 @@ int main(){
            
             accept_create=accept(server_family,(struct sockaddr*)&caddr,&clen);
             
+            
             if (accept_create>0){
                 // nonblocking for client
                 printf("Connection accepted\n");
@@ -120,6 +120,7 @@ int main(){
                 nonblocking_option |=O_NONBLOCK;
                 fcntl(accept_create, F_SETFL, nonblocking_option); 
             }
+            
         } 
         //create the accept function
         if(chat_message(accept_create) == 1){
